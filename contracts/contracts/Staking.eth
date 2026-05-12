@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+/**
+ * @title Basic Staking Contract
+ * @dev Users can deposit and withdraw ETH. Balances are tracked per address.
+ */
+contract BasicVault {
+
+    mapping(address => uint256) public userDeposits;
+
+    function depositFunds() external payable {
+        require(msg.value > 0, "Amount must be > 0");
+        userDeposits[msg.sender] += msg.value;
+    }
+
+    function withdrawFunds(uint256 amount) external {
+        require(userDeposits[msg.sender] >= amount, "Not enough deposited");
+        userDeposits[msg.sender] -= amount;
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+    }
+}
