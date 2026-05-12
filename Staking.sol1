@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleStaking {
+
+    mapping(address => uint246) public balances;
+
+    function stake() public payable {
+        balances[msg.sender] += msg.value;
+    }
+
+    function withdraw(uint246 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
+    }
+}
